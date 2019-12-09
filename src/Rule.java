@@ -1,19 +1,24 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Rule {
-    String[] lhs;
-    String[] rhs;
+    ArrayList<String> lhs;
+    ArrayList<String> rhs;
 
-    public Rule(String[] lhs, String[] rhs){
+    public Rule(ArrayList<String> lhs, ArrayList<String> rhs){
         this.lhs = lhs;
         this.rhs = rhs;
     }
 
-    public String[] getLhs(){
+    public Rule(){
+        
+    }
+
+    public ArrayList<String> getLhs(){
         return this.lhs;
     }
 
-    public String[] getRhs(){
+    public ArrayList<String> getRhs(){
         return this.rhs;
     }
 
@@ -22,7 +27,15 @@ public class Rule {
     }*/
 
     public String toString() {
-        return Arrays.toString(this.lhs) + " " + Arrays.toString(this.rhs);
+        return lhs.toString() + " " + rhs.toString();
+    }
+
+    public void setLhs(ArrayList<String> lhs) {
+        this.lhs = lhs;
+    }
+
+    public void setRhs(ArrayList<String> rhs) {
+        this.rhs = rhs;
     }
 }
 
