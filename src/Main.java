@@ -63,6 +63,12 @@ public class Main {
                     Rule newerrule = new Rule( x, rule.lhs, newrule.rhs); //Create new implied rule
                     x++;
                     newrulelist.add(newerrule);
+                    for (int g = 0; g < newrulelist.size(); g++){
+                        Rule test2 = newrulelist.get(g + 1);
+                        if(newerrule.equals(test2)){
+                            newrulelist.remove(test2);
+                        }
+                    }
                 }
                 else {
                     for(int k = 0; k < rule.rhs.size(); k++){
@@ -84,6 +90,12 @@ public class Main {
                     Rule newerrule = new Rule(x , rule.lhs, newrule.rhs); //Create new implied rule
                     x++;
                     newrulelist.add(newerrule);
+                    for (int g = 0; g < newrulelist.size(); g++){
+                            Rule test2 = newrulelist.get(g + 1);
+                            if(newerrule.equals(test2)){
+                                newrulelist.remove(test2);
+                            }
+                    }
                 }
                 else {
                     for(int k = 0; k < rule.rhs.size(); k++){
@@ -96,6 +108,7 @@ public class Main {
                 }
             }
         }
+
         for(int q = 0; q < newrulelist.size(); q++) {
             System.out.println(newrulelist.get(q).toString());
         }
