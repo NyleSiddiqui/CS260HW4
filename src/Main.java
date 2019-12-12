@@ -5,22 +5,93 @@ import java.util.List;
 import org.bson.Document;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         MongoDAO dao = new MongoDAO();
         dao.connect();
         dao.setDatabase("CS260");
-        dao.setCollection("RulesFull");
+        dao.setCollection("Rules");
         dao.findAll();
         ArrayList<Rule> ruleList = dao.processDocuments();
-        //ArrayList<String> leftResults = new ArrayList<>();
-       // ArrayList<String> rightResults = new ArrayList<>();
-        //ArrayList<Rule> ruleList = new ArrayList<>();
+        ArrayList<Rule> testlist = new ArrayList<>();
+        ruleGeneration(ruleList, testlist);
+        newRuleGeneration(ruleList, testlist);
+        printArray(ruleList);
+        printArray(testlist);
+        dao.disconnect();
+
+    }
+
+
+    public static void printArray(ArrayList<Rule> ruleList) {
+        for (int i = 0; i < ruleList.size(); i++) {
+            System.out.println(ruleList.get(i).toString());
+        }
+    }
+
+    public static ArrayList<Rule> ruleGeneration(ArrayList<Rule> ruleList, ArrayList<Rule> newRuleList) {
         int x = ruleList.get(ruleList.size() - 1).id + 1;
+        for (int i = 0; i < ruleList.size(); i++) {
+            Rule rule = ruleList.get(i); //Initial rule
+            for (int j = i + 1; j < ruleList.size(); j++) {
+                Rule rule2 = ruleList.get(j); // Rule ahead of initial rule
+                if (rule.rhs.equals(rule2.lhs)) {
+                    Rule newRule = new Rule(x, rule.lhs, rule2.rhs); //Create new implied rule
+                    x++;
+                    newRuleList.add(newRule);
+                } else {
+                    for (int k = 0; k < rule.rhs.size(); k++) {
+                        if (rule.rhs.get(k).equals(rule2.lhs.get(0))) {
+                            Rule r = new Rule(x, rule.lhs, rule2.rhs);
+                            x++;
+                            newRuleList.add(r);
+                        }
+                    }
+                }
+            }
+        }
+        return newRuleList;
+    }
+
+    public static ArrayList<Rule> newRuleGeneration(ArrayList<Rule> ruleList, ArrayList<Rule> newRuleList) {
+        int x = newRuleList.get(newRuleList.size() - 1).id + 1;
+        for (int i = 0; i < newRuleList.size(); i++) {
+            Rule rule = newRuleList.get(i);
+            for (int j = i + 1; j < ruleList.size(); j++) {
+                Rule newrule = ruleList.get(j); // Rule ahead of initial rule
+                if (rule.rhs.equals(newrule.lhs)) {
+                    Rule newerrule = new Rule(x, rule.lhs, newrule.rhs); //Create new implied rule
+                    x++;
+                    newRuleList.add(newerrule);
+
+                } else {
+                    for (int k = 0; k < rule.rhs.size(); k++) {
+                        if (rule.rhs.get(k).equals(newrule.lhs.get(0))) {
+                            Rule r = new Rule(x, rule.lhs, newrule.rhs);
+                            x++;
+                            newRuleList.add(r);
+                        }
+                    }
+                }
+            }
+        }
+        return newRuleList;
+    }
+
+}
 
 
 
 
-        /*for (String str : collection) {
+                  /*  for (int g = 0; g < newrulelist.size(); g++){
+        Rule test2 = newrulelist.get(g + 1);
+        if(newerrule.equals(test2)){
+        newrulelist.remove(test2);
+        }
+        }
+//ArrayList<String> leftResults = new ArrayList<>();
+// ArrayList<String> rightResults = new ArrayList<>();
+//ArrayList<Rule> ruleList = new ArrayList<>();
+/*for (String str : collection) {
             int rIndex = str.indexOf("r_rhs=");
             int lastrIndex = str.indexOf(']', rIndex);
             int lIndex = str.indexOf("r_lhs=");
@@ -49,26 +120,15 @@ public class Main {
 
 
         }*/
-
-
-        for(int q = 0; q < ruleList.size(); q++) {
-            System.out.println(ruleList.get(q).toString());
-        }
-        ArrayList<Rule> newrulelist = new ArrayList<>();
+ /*ArrayList<Rule> newrulelist = new ArrayList<>();
         for (int i = 0; i < ruleList.size(); i++){
             Rule rule = ruleList.get(i); //Initial rule
             for(int j = i + 1; j < ruleList.size(); j++){
                 Rule newrule = ruleList.get(j); // Rule ahead of initial rule
                 if (rule.rhs.equals(newrule.lhs)) {
-                    Rule newerrule = new Rule( x, rule.lhs, newrule.rhs); //Create new implied rule
+                    Rule newerrule = new Rule(x, rule.lhs, newrule.rhs); //Create new implied rule
                     x++;
                     newrulelist.add(newerrule);
-                    for (int g = 0; g < newrulelist.size(); g++){
-                        Rule test2 = newrulelist.get(g + 1);
-                        if(newerrule.equals(test2)){
-                            newrulelist.remove(test2);
-                        }
-                    }
                 }
                 else {
                     for(int k = 0; k < rule.rhs.size(); k++){
@@ -81,8 +141,8 @@ public class Main {
                 }
             }
         }
-
-        for(int i = 0; i < newrulelist.size(); i++){
+*/
+ /*for(int i = 0; i < newrulelist.size(); i++){
             Rule rule = newrulelist.get(i);
             for(int j = i + 1; j < ruleList.size(); j++){
                 Rule newrule = ruleList.get(j); // Rule ahead of initial rule
@@ -90,12 +150,7 @@ public class Main {
                     Rule newerrule = new Rule(x , rule.lhs, newrule.rhs); //Create new implied rule
                     x++;
                     newrulelist.add(newerrule);
-                    for (int g = 0; g < newrulelist.size(); g++){
-                            Rule test2 = newrulelist.get(g + 1);
-                            if(newerrule.equals(test2)){
-                                newrulelist.remove(test2);
-                            }
-                    }
+
                 }
                 else {
                     for(int k = 0; k < rule.rhs.size(); k++){
@@ -112,9 +167,4 @@ public class Main {
         for(int q = 0; q < newrulelist.size(); q++) {
             System.out.println(newrulelist.get(q).toString());
         }
-
-
-        dao.disconnect();
-
-    }
-}
+ */
