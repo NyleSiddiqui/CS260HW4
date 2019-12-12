@@ -4,10 +4,12 @@ import java.util.Arrays;
 public class Rule {
     ArrayList<String> lhs;
     ArrayList<String> rhs;
+    int id;
 
-    public Rule(ArrayList<String> lhs, ArrayList<String> rhs){
+    public Rule(int id, ArrayList<String> lhs, ArrayList<String> rhs){
         this.lhs = lhs;
         this.rhs = rhs;
+        this.id = id;
     }
 
     public Rule(){
@@ -22,12 +24,37 @@ public class Rule {
         return this.rhs;
     }
 
-    /*public boolean equals(Rule rule) {
-        return rule.rhs == this.lhs;
-    }*/
+    public boolean equals(Rule rule) {
+        return rule.lhs == this.lhs && rule.rhs == this.rhs;
+    }
 
     public String toString() {
-        return lhs.toString() + " " + rhs.toString();
+        String output = id + " " + "IF ";
+        if(lhs.size() > 1){
+            for(int i = 0; i < lhs.size(); i++){
+                output += lhs.get(i);
+                if(i + 1 < lhs.size()){
+                    output += " AND ";
+                }
+            }
+        } else {
+            output += lhs.get(0);
+        }
+
+
+        output += " THEN ";
+
+        if(rhs.size() > 1){
+            for(int i = 0; i < rhs.size(); i++){
+                output += rhs.get(i);
+                if(i + 1 < rhs.size()){
+                    output += " AND ";
+                }
+            }
+        } else {
+            output += rhs.get(0);
+        }
+        return output;
     }
 
     public void setLhs(ArrayList<String> lhs) {
