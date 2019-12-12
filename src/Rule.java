@@ -16,14 +16,6 @@ public class Rule {
         
     }
 
-    public ArrayList<String> getLhs(){
-        return this.lhs;
-    }
-
-    public ArrayList<String> getRhs(){
-        return this.rhs;
-    }
-
     public boolean equals(Rule rule) {
         return rule.lhs == this.lhs && rule.rhs == this.rhs;
     }
@@ -55,14 +47,6 @@ public class Rule {
             output += rhs.get(0);
         }
         return output;
-    }
-
-    public void setLhs(ArrayList<String> lhs) {
-        this.lhs = lhs;
-    }
-
-    public void setRhs(ArrayList<String> rhs) {
-        this.rhs = rhs;
     }
 }
 

@@ -1,20 +1,24 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import java.util.*;
 import org.bson.Document;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner console = new Scanner(System.in);
         MongoDAO dao = new MongoDAO();
         dao.connect();
         dao.setDatabase("CS260");
-        dao.setCollection("Rules");
+        System.out.print("Collection? ");
+        String answer = console.nextLine();
+        dao.setCollection(answer);
         dao.findAll();
         ArrayList<Rule> ruleList = dao.processDocuments();
+        System.out.println("INPUTTED RULES:");
+        printArray(ruleList);
+        System.out.println();
         ArrayList<Rule> testlist = new ArrayList<>();
         ruleGeneration(ruleList, testlist);
         newRuleGeneration(ruleList, testlist);
+        System.out.println("UPDATED RULES:");
         printArray(ruleList);
         printArray(testlist);
         dao.disconnect();
