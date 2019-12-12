@@ -48,6 +48,20 @@ public class Rule {
         }
         return output;
     }
+    public static boolean ruleMatch(Rule r1, Rule r2){
+        int counter = 0;
+        for(int i = 0; i < r1.rhs.size(); i++){
+            for(int j = 0; j < r2.lhs.size(); j++){
+                if (r1.rhs.get(i).equals(r2.lhs.get(j))){
+                    counter++;
+                }
+            }
+        }
+        if(counter == r2.lhs.size()){
+            return true;
+        }
+        return false;
+    }
 }
 
 
