@@ -46,15 +46,18 @@ public class MongoDAO {
                 new ArrayList<>());
     }
 
-    public List<String> processDocuments(){
-        List<String> list = new ArrayList<>();
+    public ArrayList<Rule> processDocuments(){
+        ArrayList<Rule> rulelist = new ArrayList<>();
         for(Document document : documents) {
-            if (document.toString() != null) {
-                String result = document.toString();
-                list.add(result);
+            if(document.toString() != null){
+                int id = (int) document.get("r_id");
+                ArrayList<String> left = (ArrayList<String>) document.get("r_lhs");
+                ArrayList<String> right = (ArrayList<String>) document.get("r_rhs");
+                Rule rule = new Rule(id, left, right);
+                rulelist.add(rule);
             }
         }
-        return list;
+        return rulelist;
     }
 
     public void disconnect(){

@@ -9,20 +9,23 @@ public class Main {
         MongoDAO dao = new MongoDAO();
         dao.connect();
         dao.setDatabase("CS260");
-        dao.setCollection("Rules");
+        dao.setCollection("RulesFull");
         dao.findAll();
-        List<String> collection = dao.processDocuments();
-        System.out.println(collection);
-        ArrayList<String> leftResults = new ArrayList<>();
-        ArrayList<String> rightResults = new ArrayList<>();
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        int x = 1;
-        for (String str : collection) {
+        ArrayList<Rule> ruleList = dao.processDocuments();
+        //ArrayList<String> leftResults = new ArrayList<>();
+       // ArrayList<String> rightResults = new ArrayList<>();
+        //ArrayList<Rule> ruleList = new ArrayList<>();
+        int x = ruleList.get(ruleList.size() - 1).id + 1;
+
+
+
+
+        /*for (String str : collection) {
             int rIndex = str.indexOf("r_rhs=");
             int lastrIndex = str.indexOf(']', rIndex);
             int lIndex = str.indexOf("r_lhs=");
             int lastlIndex = str.indexOf(']', lIndex);
-            String lResult = str.substring(lIndex + 6, lastlIndex+ 1);
+            String lResult = str.substring(lIndex + 6, lastlIndex + 1);
             String rResult = str.substring(rIndex + 6, lastrIndex + 1);
             ArrayList<String> leftstringparser = new ArrayList<>();
             ArrayList<String> rightstringparser = new ArrayList<>();
@@ -45,7 +48,9 @@ public class Main {
             ruleList.add(rule);
 
 
-        }
+        }*/
+
+
         for(int q = 0; q < ruleList.size(); q++) {
             System.out.println(ruleList.get(q).toString());
         }
@@ -55,7 +60,7 @@ public class Main {
             for(int j = i + 1; j < ruleList.size(); j++){
                 Rule newrule = ruleList.get(j); // Rule ahead of initial rule
                 if (rule.rhs.equals(newrule.lhs)) {
-                    Rule newerrule = new Rule(x , rule.lhs, newrule.rhs); //Create new implied rule
+                    Rule newerrule = new Rule( x, rule.lhs, newrule.rhs); //Create new implied rule
                     x++;
                     newrulelist.add(newerrule);
                 }
