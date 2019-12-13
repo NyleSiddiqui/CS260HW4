@@ -49,7 +49,7 @@ public class Main {
         int finalCount = ruleList.size(); //size of new list of rules
         int count = finalCount - initialCount; //Calculates count of new rules
         printArraywCount(ruleList, count); //Calls print array method that also prints count
-        resetDatabase(dao, ruleList); //Takes care of database updating
+        resetDatabase(dao, ruleList); //Takes care of database inserting
     }
 
 
@@ -81,6 +81,7 @@ public class Main {
     */
 
     public static void printDateRange(MongoDAO dao, Scanner console) {
+        System.out.println("Enter dates in CDT format: yyyy-mm-ddThh:mm:ss");
         System.out.println("Start date: ");
         String start = console.nextLine();
         System.out.println("End date: ");
