@@ -11,11 +11,7 @@ December 14, 2019
 This program reads a database of rules, and based on varied user input, generate all possible rules possible within that rule set, select varied ranges, and store the results in a separate repository.
 */
 
-
 public class Main {
-
-
-    //TODO Finish taking out automatic delete
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
         MongoDAO dao = new MongoDAO(); //Create database connection
@@ -60,6 +56,7 @@ public class Main {
     /*
     Loops through an array of rules and prints all the values.
      */
+
     public static void printArray(RuleSet ruleList) {
         for (int i = 0; i < ruleList.size(); i++) {
             System.out.println(ruleList.get(i).toString());
@@ -70,6 +67,7 @@ public class Main {
     /*
     Loops through an array and of rules and prints all the values, but also includes count of new rules generated where appropriate.
      */
+
     public static void printArraywCount(RuleSet ruleList, int count) {
         for (int i = 0; i < ruleList.size(); i++) {
             System.out.println(ruleList.get(i).toString());
@@ -81,6 +79,7 @@ public class Main {
     /*
     Asks for date range, finds the documents that fit that range, create an array list of Rules, prints them out, and sends the results to the database.
     */
+
     public static void printDateRange(MongoDAO dao, Scanner console) {
         System.out.println("Start date: ");
         String start = console.nextLine();
@@ -95,6 +94,7 @@ public class Main {
     /*
     Asks for ID range, finds the documents that fit that range, create an array list of Rules, prints them out, and sends the results to the database.
     */
+
     public static void printIDRange(MongoDAO dao, Scanner console) {
         RuleSet ruleList = new RuleSet();
         System.out.println("Start of ID range?");
@@ -124,7 +124,7 @@ public class Main {
         dao.connect(); //Creates a new one in order to change database and collection
         dao.setDatabase("SIDDIQUN8701");
         dao.setCollection("RulesOutput");
-        dao.deleteAll();
+        dao.deleteAll(); //Assuming we don't want the database building on itself, and only want the database to contain the rules for one specific query.
         for (int i = 0; i < set.size(); i++) {
             dao.insertOne(set.get(i).jsonString());
         }
