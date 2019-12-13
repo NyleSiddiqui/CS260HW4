@@ -7,14 +7,6 @@ public class RuleSet {
         arr = new ArrayList<>();
     }
 
-    public boolean contains(Rule rule){
-        for(int i = 0; i < arr.size(); i++){
-            if(arr.get(i).equals(rule)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public Rule get(int i){
         return arr.get(i);

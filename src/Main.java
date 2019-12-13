@@ -47,13 +47,13 @@ public class Main {
     public static void printAll(MongoDAO dao) {
         dao.findAll();
         RuleSet ruleList = dao.processDocuments();
-        int initialCount = ruleList.size();
+        int initialCount = ruleList.size(); //size of original list of rules
         ruleGeneration(ruleList);
         System.out.println("UPDATED RULES LIST:");
-        int finalCount = ruleList.size();
-        int count = finalCount - initialCount;
-        printArraywCount(ruleList, count);
-        resetDatabase(dao, ruleList);
+        int finalCount = ruleList.size(); //size of new list of rules
+        int count = finalCount - initialCount; //Calculates count of new rules
+        printArraywCount(ruleList, count); //Calls print array method that also prints count
+        resetDatabase(dao, ruleList); //Takes care of database updating
     }
 
 
@@ -104,14 +104,14 @@ public class Main {
         for (int i = start; i <= end; i++) {
             dao.findSomeEqual("r_id", i);
             RuleSet set = dao.processDocuments();
-            ruleList.add(set.get(0));
+            ruleList.add(set.get(0)); //Each search only returns one result at a time. This adds each individual result into the set
         }
         int initialCount = ruleList.size();
         ruleGeneration(ruleList);
         int finalCount = ruleList.size();
         int count = finalCount - initialCount;
         printArraywCount(ruleList, count);
-        resetDatabase(dao, ruleList); //Takes care of database updating
+        resetDatabase(dao, ruleList);
     }
 
 
@@ -120,8 +120,8 @@ public class Main {
     */
 
     public static void resetDatabase(MongoDAO dao, RuleSet set) {
-        dao.disconnect();
-        dao.connect();
+        dao.disconnect(); //Breaks old dao connection
+        dao.connect(); //Creates a new one in order to change database and collection
         dao.setDatabase("SIDDIQUN8701");
         dao.setCollection("RulesOutput");
         dao.deleteAll();
@@ -131,17 +131,19 @@ public class Main {
     }
 
 
+    /*
+    This method runs through a list of rules, reads the left and right hands of the statement, and generates every possible new relational rule. It then stores all the rules, including the original rules, into an array of rules and returns it.
+     */
 
     public static RuleSet ruleGeneration(RuleSet ruleList) {
-        int x = ruleList.get(ruleList.size() - 1).id + 1;
+        int x = ruleList.get(ruleList.size() - 1).id + 1; //Assigns id number by retrieving id number of last rule in the array and adding one
         Date date = new Date();
-        int count = 0;
-        for (int i = 0; i < ruleList.size(); i++) {
-            for (int j = 0; j < ruleList.size(); j++) {
+        for (int i = 0; i < ruleList.size(); i++) { //Loops through the list
+            for (int j = 0; j < ruleList.size(); j++) { //Loops through the list again, effectively checking the first loop's rule with every other rule in the list
                 if (i != j) { //Dont compare a rule to itself
                     if (Rule.ruleMatch(ruleList.get(i), ruleList.get(j))) {
                         Rule rule = new Rule(x, ruleList.get(i).lhs, ruleList.get(j).rhs, date);
-                        x++;
+                        x++; //Increment id number for next rule
                         ruleList.add(rule);
                     }
                 }

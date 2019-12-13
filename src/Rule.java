@@ -55,17 +55,17 @@ public class Rule {
     }
     public static boolean ruleMatch(Rule r1, Rule r2){
         int counter = 0;
-        for(int i = 0; i < r1.rhs.size(); i++){
-            for(int j = 0; j < r2.lhs.size(); j++){
-                if (r1.rhs.get(i).equals(r2.lhs.get(j))){
+        for(int i = 0; i < r1.rhs.size(); i++){ //Loops through every individual letter on the right side
+            for(int j = 0; j < r2.lhs.size(); j++){ //Loops through every individual letter on the left side
+                if (r1.rhs.get(i).equals(r2.lhs.get(j))){ //If the letter on the right hand side also equals the letter on the left hand, increase the counter
                     counter++;
                 }
             }
         }
-        if(counter == r2.lhs.size()){
+        if(counter == r2.lhs.size()){ //If the count of the size of the resulting possible pair is the same size as the right hand pair that was being tested, and all the letters were already tested, it is a new rule. Duplicates prevented when ran through multiple times in the ruleGeneration method
             return true;
         }
-        return false;
+        return false; //Prevent rule form being created and added, incorrect
     }
 
     public String jsonString(){
