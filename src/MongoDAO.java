@@ -46,18 +46,18 @@ public class MongoDAO {
                 new ArrayList<>());
     }
 
-    public ArrayList<Rule> processDocuments(){
-        ArrayList<Rule> rulelist = new ArrayList<>();
+    public RuleSet processDocuments(){
+        RuleSet set = new RuleSet();
         for(Document document : documents) {
             if(document.toString() != null){
                 int id = (int) document.get("r_id");
                 ArrayList<String> left = (ArrayList<String>) document.get("r_lhs");
                 ArrayList<String> right = (ArrayList<String>) document.get("r_rhs");
                 Rule rule = new Rule(id, left, right);
-                rulelist.add(rule);
+                set.add(rule);
             }
         }
-        return rulelist;
+        return set;
     }
 
     public void disconnect(){

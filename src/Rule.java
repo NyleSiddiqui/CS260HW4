@@ -62,6 +62,11 @@ public class Rule {
         }
         return false;
     }
+
+    public String jsonString(){
+        return "{'r_id' : " + id + " , 'r_lhs' : [ '" + lhs + "' ] , 'r_rhs' : [ '" + rhs + "' ] }";
+    }
+
 }
 
 
