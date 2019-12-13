@@ -12,16 +12,17 @@ public class Main {
         System.out.print("Collection? ");
         String answer = console.nextLine();
         dao.setCollection(answer);
-        System.out.println("Would you like (A)LL rules, a specific (I)D range, or (D)ate range  ");
+        System.out.println("Would you like (A)LL rules, a specific (I)D range, or (D)ate range ");
         answer = console.nextLine();
+
         if(answer.toLowerCase().equals("a")){
-            dao.findAll();
-            RuleSet ruleList = dao.processDocuments();
-            printAll(ruleList, dao);
+            printAll(dao);
         }
+
         if(answer.toLowerCase().equals("i")){
-         printIDRange(dao, console);
+            printIDRange(dao, console);
         }
+
         if(answer.toLowerCase().equals("d")){
             printDateRange(dao);
         }
@@ -41,13 +42,7 @@ public class Main {
         dao.disconnect();
         ruleGeneration(ruleList);
         printArray(ruleList);
-        dao.connect();
-        dao.setDatabase("SIDDIQUN8701");
-        dao.setCollection("RulesOutput");
-        dao.deleteAll();
-        for(int i = 0; i < ruleList.size() ; i++){
-            dao.insertOne(ruleList.get(i).jsonString());
-        }
+        resetDatabase(dao, ruleList);
     }
 
 
@@ -58,33 +53,44 @@ public class Main {
         //System.out.println("End date: ");
         //String end = console.nextLine();
         String end = "2019-04-05T02:08:00";
-
-
-
         dao.dateTime("r_datetime", start, end);
         RuleSet set = dao.processDocuments();
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        for(int i = 0; i < set.size(); i++) {
-            ruleList.add(set.get(i));
+        resetDatabase(dao, set);
+        System.out.println(set.toString());
+    }
 
+    public static void resetDatabase(MongoDAO dao, RuleSet set){
+        dao.disconnect();
+        dao.connect();
+        dao.setDatabase("SIDDIQUN8701");
+        dao.setCollection("RulesOutput");
+        dao.deleteAll();
+        for(int i = 0; i < set.size(); i++) {
+            dao.insertOne(set.get(i).jsonString());
         }
     }
 
 
-    public static void printAll(RuleSet ruleList, MongoDAO dao){
+    public static void printAll(MongoDAO dao){
+        dao.findAll();
+        RuleSet ruleList = dao.processDocuments();
         System.out.println("INPUTTED RULES LIST:");
         printArray(ruleList);
         System.out.println();
         ruleGeneration(ruleList);
         System.out.println("UPDATED RULES LIST:");
         printArray(ruleList);
-        dao.disconnect();
+        resetDatabase(dao, ruleList);
     }
 
     public static void printArray(RuleSet ruleList) {
         for (int i = 0; i < ruleList.size(); i++) {
             System.out.println(ruleList.get(i).toString());
         }
+    }
+
+    public static int storeCount(int count){
+        return count;
     }
 
     public static RuleSet ruleGeneration(RuleSet ruleList) {
@@ -98,11 +104,11 @@ public class Main {
                         Rule rule = new Rule(x, ruleList.get(i).lhs, ruleList.get(j).rhs, date);
                         x++;
                         ruleList.add(rule);
-                        count++;
                     }
                 }
             }
         }
+        storeCount(count);
         return ruleList;
     }
 }
