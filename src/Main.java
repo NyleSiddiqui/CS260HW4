@@ -1,3 +1,6 @@
+import javax.swing.text.Document;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class Main {
@@ -19,8 +22,9 @@ public class Main {
         if(answer.toLowerCase().equals("i")){
          printIDRange(dao, console);
         }
-
-
+        if(answer.toLowerCase().equals("d")){
+            printDateRange(dao);
+        }
     }
 
     public static void printIDRange(MongoDAO dao, Scanner console){
@@ -34,8 +38,35 @@ public class Main {
             RuleSet set = dao.processDocuments();
             ruleList.add(set.get(0));
         }
-        for(int i = start; i < end; i++){
+        dao.disconnect();
+        ruleGeneration(ruleList);
+        printArray(ruleList);
+        dao.connect();
+        dao.setDatabase("SIDDIQUN8701");
+        dao.setCollection("RulesOutput");
+        dao.deleteAll();
+        for(int i = 0; i < ruleList.size() ; i++){
             dao.insertOne(ruleList.get(i).jsonString());
+        }
+    }
+
+
+    public static void printDateRange(MongoDAO dao){
+        //System.out.println("Start date: ");
+        //String start = console.nextLine();
+        String start = "2019-04-05T02:00:00";
+        //System.out.println("End date: ");
+        //String end = console.nextLine();
+        String end = "2019-04-05T02:08:00";
+
+
+
+        dao.dateTime("r_datetime", start, end);
+        RuleSet set = dao.processDocuments();
+        ArrayList<Rule> ruleList = new ArrayList<>();
+        for(int i = 0; i < set.size(); i++) {
+            ruleList.add(set.get(i));
+
         }
     }
 
@@ -58,13 +89,16 @@ public class Main {
 
     public static RuleSet ruleGeneration(RuleSet ruleList) {
         int x = ruleList.get(ruleList.size() - 1).id + 1;
+        Date date = new Date();
+        int count = 0;
         for (int i = 0; i < ruleList.size(); i++) {
             for (int j = 0; j < ruleList.size(); j++) {
                 if(i != j){ //Dont compare a rule to itself
                     if (Rule.ruleMatch(ruleList.get(i), ruleList.get(j))) {
-                        Rule rule = new Rule(x, ruleList.get(i).lhs, ruleList.get(j).rhs);
+                        Rule rule = new Rule(x, ruleList.get(i).lhs, ruleList.get(j).rhs, date);
                         x++;
                         ruleList.add(rule);
+                        count++;
                     }
                 }
             }

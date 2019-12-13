@@ -1,9 +1,13 @@
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.ListDatabasesIterable;
 import org.bson.Document;
 import static com.mongodb.client.model.Filters.*;
@@ -51,9 +55,10 @@ public class MongoDAO {
         for(Document document : documents) {
             if(document.toString() != null){
                 int id = (int) document.get("r_id");
+                Date date = (Date) document.get("r_datetime");
                 ArrayList<String> left = (ArrayList<String>) document.get("r_lhs");
                 ArrayList<String> right = (ArrayList<String>) document.get("r_rhs");
-                Rule rule = new Rule(id, left, right);
+                Rule rule = new Rule(id, left, right, date);
                 set.add(rule);
             }
         }
@@ -83,6 +88,22 @@ public class MongoDAO {
 
     public void deleteAll(){
         collection.deleteMany(new Document());
+    }
+
+    public void dateTime(String field, String start, String end){
+        start += ".000Z";
+        Instant instant = Instant.parse(start);
+        instant = instant.plus(5, ChronoUnit.HOURS);
+        Date startDate = Date.from(instant);
+
+        end += ".000Z";
+        instant = Instant.parse(end);
+        instant = instant.plus(5, ChronoUnit.HOURS);
+        Date endDate = Date.from(instant);
+
+        BasicDBObject getQuery = new BasicDBObject();
+        getQuery.put(field, new BasicDBObject("$gte", startDate).append("$lte", endDate));
+        documents = (List<Document>) collection.find(getQuery).into(new ArrayList<Document>());
     }
 
 }

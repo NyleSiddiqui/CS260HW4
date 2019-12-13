@@ -1,15 +1,20 @@
 import java.util.ArrayList;
+import java.util.*;
 import java.util.Arrays;
 
 public class Rule {
     ArrayList<String> lhs;
     ArrayList<String> rhs;
     int id;
+    Date date;
 
-    public Rule(int id, ArrayList<String> lhs, ArrayList<String> rhs){
+    public Rule(int id, ArrayList<String> lhs, ArrayList<String> rhs, Date date){
         this.lhs = lhs;
         this.rhs = rhs;
         this.id = id;
+        this.date = date;
+
+
     }
 
     public Rule(){
@@ -64,7 +69,7 @@ public class Rule {
     }
 
     public String jsonString(){
-        return "{'r_id' : " + id + " , 'r_lhs' : [ '" + lhs + "' ] , 'r_rhs' : [ '" + rhs + "' ] }";
+        return "{'r_id' : " + id + " , 'r_lhs' : [ '" + lhs + "' ] , 'r_rhs' : [ '" + rhs + "' ], 'r_datetime' : '" + date + "' }";
     }
 
 }
