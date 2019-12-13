@@ -24,7 +24,7 @@ public class Main {
         }
 
         if(answer.toLowerCase().equals("d")){
-            printDateRange(dao);
+            printDateRange(dao, console);
         }
     }
 
@@ -39,24 +39,21 @@ public class Main {
             RuleSet set = dao.processDocuments();
             ruleList.add(set.get(0));
         }
-        dao.disconnect();
         ruleGeneration(ruleList);
         printArray(ruleList);
         resetDatabase(dao, ruleList);
     }
 
 
-    public static void printDateRange(MongoDAO dao){
-        //System.out.println("Start date: ");
-        //String start = console.nextLine();
-        String start = "2019-04-05T02:00:00";
-        //System.out.println("End date: ");
-        //String end = console.nextLine();
-        String end = "2019-04-05T02:08:00";
+    public static void printDateRange(MongoDAO dao, Scanner console){
+        System.out.println("Start date: ");
+        String start = console.nextLine();
+        System.out.println("End date: ");
+        String end = console.nextLine();
         dao.dateTime("r_datetime", start, end);
         RuleSet set = dao.processDocuments();
         resetDatabase(dao, set);
-        System.out.println(set.toString());
+        printArray(set);
     }
 
     public static void resetDatabase(MongoDAO dao, RuleSet set){
