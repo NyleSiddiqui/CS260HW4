@@ -9,13 +9,13 @@ Nyle Siddiqui
 CS260 Homework 4
 December 14, 2019
 This program reads a database of rules, and based on varied user input, generate all possible rules possible within that rule set, select varied ranges, and store the results in a separate repository.
- */
+*/
 
 
 public class Main {
 
 
-    //TODO Finish taking out automatic delete and read submission
+    //TODO Finish taking out automatic delete
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
         MongoDAO dao = new MongoDAO(); //Create database connection
